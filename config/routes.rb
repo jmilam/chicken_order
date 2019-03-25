@@ -1,7 +1,7 @@
 Rails.application.routes.draw do
   get 'farm/index'
 
-  get 'farm/:id', to: 'farm#edit', as: 'edit_farm'
+  get 'farm/:unique_key', to: 'farm#edit', as: 'edit_farm'
   patch 'farm/update'
 
   get 'order/index'

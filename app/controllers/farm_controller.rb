@@ -2,7 +2,7 @@ class FarmController < ApplicationController
   def index; end
 
   def edit
-    @farm = Farm.find(params[:id])
+    @farm = Farm.find_by(unique_key: params[:unique_key])
   end
 
   def update
