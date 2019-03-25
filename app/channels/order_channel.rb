@@ -3,6 +3,5 @@ class OrderChannel < ApplicationCable::Channel
     # stream_from "order_channel"
   end
 
-  def unsubscribed
-  end
+  def unsubscribed; end
 end
