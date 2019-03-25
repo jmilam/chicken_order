@@ -1,0 +1,49 @@
+<%= form_for @farm, url: farm_update_path(id: @farm.id) do |f| %>
+	<div class="row">
+		<div class="form-group col-md-4 col-sm-4 col-12">
+			<%= f.label :name %>
+			<%= f.text_field :name, class: 'form-control' %>
+		</div>
+		<div class="form-group col-md-4 col-sm-4 col-12">
+			<%= f.label :phone_number %>
+			<%= f.text_field :phone_number, class: 'form-control' %>
+		</div>
+		<div class="form-group col-md-4 col-sm-4, col-12">
+			<%= f.label :unique_key %>
+			<%= f.text_field :unique_key, class: 'form-control', disabled: true %>
+		</div>
+	</div>
+	<div class="row">
+		<div class="form-group col-md-12 col-sm-12 col-12">
+			<%= f.label :address %>
+			<%= f.text_field :address, class: 'form-control' %>
+		</div>
+		<div class="form-group col-md-4 col-12">
+			<%= f.label :city %>
+			<%= f.text_field :city, class: 'form-control' %>
+		</div>
+		<div class="form-group col-md-4 col-12">
+			<%= f.label :state %>
+			<%= f.text_field :state, class: 'form-control' %>
+		</div>
+		<div class="form-group col-md-4 col-12">
+			<%= f.label :zipcode %>
+			<%= f.text_field :zipcode, class: 'form-control' %>
+		</div>
+	</div>
+	<div class="row">
+		<div class="form-group col-md-4 col-sm-4, col-12">
+			<%= f.label :total_eggs, "Total Eggs By Dozen" %>
+			<%= f.text_field :total_eggs, class: 'form-control' %>
+		</div>
+		<div class="form-group col-md-4 col-sm-4, col-12">
+			<%= f.label :egg_cost, "Cost Per Dozen:" %>
+			<%= f.text_field :egg_cost, class: 'form-control' %>
+		</div>
+		<div class="form-group col-md-4 col-sm-4, col-12">
+			<%= f.label :chicken_count, "How many laying hens do you have?" %>
+			<%= f.text_field :chicken_count, class: 'form-control' %>
+		</div>
+	</div>
+	<%= f.submit "Update Farm", class: 'btn btn-primary' %>
+<% end %>

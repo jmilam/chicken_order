@@ -1,0 +1,86 @@
+<div class="jumbotron">
+	<h1 class="display-4">Enter A New Order</h1>
+	<%= form_for :order, url: order_create_path, method: :post do |f| %>
+		<div class="row">
+			<div class="form-group col-sm-4 col-12">
+				<%= f.label :farm_id, "* Where are you ordering from? "%>
+				<%= f.select :farm_id, @farms.collect {|p| [ p.name, p.id ]}, {:prompt => 'Select Farm Ordering From'}, {class: "form-control"} %>
+				<div id='farm_order_availability' class="text-muted">
+				</div>
+			</div>
+			<div class="form-group col-sm-4 col-12">
+				<%= f.label :pickup_location_id, "* Where do you want to pickup? "%>
+				<%= f.select :pickup_location_id, @pickup_locations.collect {|p| [ p.name, p.id ]}, {:prompt => 'Select Location for Pickup'}, {class: "form-control"} %>
+				<div id="disclaimer" class="text-muted"></div>
+			</div>
+			<div class="form-group col-sm-4 col-12">
+				<%= f.label :payment_type, "* Select Payment Type "%>
+				<%= f.select :payment_type, Order.payments.collect {|key, value| [ value, key ]}, {}, {class: "form-control"} %>
+				<div id="disclaimer" class="text-muted"></div>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="form-group col-sm-6 col-12">
+				<%= f.label :first_name, "First Name: " %>
+				<%= f.text_field :first_name, class: "form-control" %>
+			</div>
+			<div class="form-group col-sm-6 col-12">
+				<%= f.label :last_name, "Last Name:" %>
+				<%= f.text_field :last_name, class: "form-control" %>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="form-group col-sm-8 col-12">
+				<%= f.label :phone_number, "* Phone Number:" %>
+				<%= f.telephone_field :phone_number, class: "form-control" %>
+			</div>
+			<div class="form-group col-sm-4 col-12">
+				<%= f.label :qty, "* How Many Dozen?" %>
+				<%= f.number_field :qty, class: "form-control" %>
+			</div>
+		</div>
+
+		<%= f.submit "Place Order", class: "btn btn-primary"  %>
+	<% end %>
+</div>
+
+<div class="jumbotron">
+	<h1 class="display-4 text-center">View Order History/Status</h1>
+	<%= form_for :past_orders, url: order_list_path, method: :get do |f| %>
+		<div class="row">
+			<div class="form-group col-sm-12 col-12 text-center">
+				<%= f.label :phone_number, "Enter Phone Number to view previous orders: " %>
+				<%= f.text_field :phone_number, class: "form-control col-sm-12 col-12", placeholder: "Phone Number" %>
+			</div>
+		</div>
+		<%= f.submit "Find Orders", class: "btn btn-primary" %>
+	<% end %>
+</div>
+
+<script>
+	$('#order_pickup_location_id').change(function(){
+		if ($(this).children('option:selected').text() === "Delivered") {
+			$('#disclaimer').append("* There is a $2 delivery fee on all orders delivered to a local address. Will only deliver to a house in a 10 mile radius of the farm. We will contact you for address.")
+		} else {
+			$('#disclaimer').empty();
+		}
+	});
+
+  $('#order_farm_id').change(function(){
+  	$('#farm_order_availability').text('');
+		$.ajax({
+		  type: 'GET',
+		  url: '/order/farm_order_availability',
+		  data: {id: $(this).val()},
+		  dataType: 'json',
+		  success: function(data){
+		  	console.log(data);
+		  	$('#farm_order_availability').text(
+		  		data.farm['name'] + ' currently has ' + data['available_eggs'] + ' dozen available for purchase. Cost per dozen: $' + data['egg_cost'] + ' * You can order more then is avaialble. We will fill it first come first serve.'
+		  	);
+		  }
+		})
+	});
+</script>

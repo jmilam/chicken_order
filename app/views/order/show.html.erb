@@ -1,0 +1,56 @@
+<table class="table table-striped">
+	<thead>
+		<tr>
+			<th>Order Number</th>
+			<th>Name</th>
+			<th>Phone Number</th>
+			<th class="text-center">Order Qty (Dozen)</th>
+			<th>Pickup Location</th>
+			<th>Payment Type</th>
+			<th class="text-center">Cost</th>
+			<th>Filled?</th>
+			<th>Delivered?</th>
+	</thead>
+	<tbody>
+		<% @orders.each do |order| %>
+			<tr>
+				<th><%= order.id %></th>
+				<td><%= order.user.first_name %> <%= order.user.last_name %></td>
+				<td><%= order.user.phone_number %></td>
+				<td class="text-center"><%= order.qty %></td>
+				<td><%= order.pickup_location %></td>
+				<td><%= Order.payments[order.payment_type.to_s] %></td>
+				<td class="text-center">$<%= order.cost %></td>
+				<td><%= check_box_tag :filled, order.id, order.filled, class: 'filled' %></td>
+				<td><%= check_box_tag :delivered, order.id, order.delivered, class: 'delivered' %></td>
+			</tr>
+		<% end %>
+	</tbody>
+</table>
+
+
+<script>
+	$('.filled').click(function(){
+		$.ajax({
+		  type: 'PATCH',
+		  url: '/order/filled',
+		  data: {checked: $(this).prop('checked'), id: $(this).val()},
+		  dataType: 'json',
+		  success: function(data){
+		  	$(this).prop('disabled', true);
+		  }
+		})
+	});
+
+	$('.delivered').click(function(){
+		$.ajax({
+		  type: 'PATCH',
+		  url: '/order/delivered',
+		  data: {checked: $(this).prop('checked'), id: $(this).val()},
+		  dataType: 'json',
+		  success: function(data){
+		  	$(this).prop('disabled', true);
+		  }
+		})
+	});
+</script>

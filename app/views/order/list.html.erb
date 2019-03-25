@@ -1,0 +1,37 @@
+<table class="table table-striped">
+	<thead>
+		<tr>
+			<th>Order Number</th>
+			<th>Name</th>
+			<th>Phone Number</th>
+			<th class="text-center">Order Qty (Dozen)</th>
+			<th class="text-center">Total Cost</th>
+			<th>Status</th>
+			<th></th>
+	</thead>
+	<tbody>
+		<% @orders.each do |order| %>
+			<tr class=<%= "bg-danger" if order.cancelled %>>
+				<th><%= order.id %></th>
+				<td><%= order.user.first_name %> <%= order.user.last_name %></td>
+				<td><%= order.user.phone_number %></td>
+				<td class="text-center"><%= order.qty %></td>
+				<td class="text-center">$<%= order.cost %></td>
+				<td><%= order.status %></td>
+				<td>
+					<%= link_to "View", order_details_path(order.id) %>
+					<% unless order.delivered || order.cancelled %>
+						| <%= link_to "Cancel", cancel_order_path(order.id), method: :patch, data: { confirm: 'Are you sure you want to cancel this order?' } %>
+					<% end %>
+				</td>
+			</tr>
+		<% end %>
+		<tr class="table-success">
+			<td colspan="3" class="text-right">Total:</td>
+			<td class="text-center"><%= @orders.sum(&:qty) %></td>
+			<td class="text-center">$<%= @orders.sum(&:cost) %></td>
+			<td/>
+			<td/>
+		</tr>
+	</tbody>
+</table>
