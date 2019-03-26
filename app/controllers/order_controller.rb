@@ -17,6 +17,7 @@ class OrderController < ApplicationController
       begin
         @user.save!
         @order.save!
+        OrderMailer.with(order: @order, user: @user).new_order.deliver_now
         flash[:notice] = 'Your order has been placed. You will hear from us soon.'
         redirect_to order_details_path(@order.id)
       rescue ActiveRecord::RecordInvalid => invalid
@@ -37,6 +38,7 @@ class OrderController < ApplicationController
   def filled
     order = Order.find(params[:id])
     ActiveRecord::Base.transaction do
+      OrderMailer.with(order: order, user: order.user).order_filled.deliver_now
       order.update(filled: params[:checked])
       order.farm.update(total_eggs: order.farm.total_eggs - order.qty)
     end
