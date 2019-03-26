@@ -11,6 +11,7 @@ class OrderController < ApplicationController
     user = User.find_by(phone_number: params[:order][:phone_number])
 
     @user = user.nil? ? User.new(user_params) : user
+    @user.email = params[:order][:email] unless params[:order][:email].blank?
     @order = @user.orders.build(order_params)
 
     ActiveRecord::Base.transaction do
@@ -38,7 +39,7 @@ class OrderController < ApplicationController
   def filled
     order = Order.find(params[:id])
     ActiveRecord::Base.transaction do
-      OrderMailer.with(order: order, user: order.user).order_filled.deliver_now
+      OrderMailer.with(order: order, user: order.user).order_filled.deliver_now if !order.user.email.blank?
       order.update(filled: params[:checked])
       order.farm.update(total_eggs: order.farm.total_eggs - order.qty)
     end
@@ -78,7 +79,7 @@ class OrderController < ApplicationController
   private
 
   def user_params
-    params.require(:order).permit(:first_name, :last_name, :phone_number)
+    params.require(:order).permit(:first_name, :last_name, :phone_number, :email)
   end
 
   def order_params

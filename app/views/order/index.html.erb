@@ -32,9 +32,14 @@
 		</div>
 
 		<div class="row">
-			<div class="form-group col-sm-8 col-12">
+			<div class="form-group col-sm-4 col-12">
 				<%= f.label :phone_number, "* Phone Number:" %>
 				<%= f.telephone_field :phone_number, class: "form-control" %>
+			</div>
+			<div class="form-group col-sm-4 col-12">
+				<%= f.label :email, "Email:" %>
+				<%= f.telephone_field :email, class: "form-control" %>
+				<div id="email-text" class="text-muted">Only needed if you'd like email updates on your order via email.</div>
 			</div>
 			<div class="form-group col-sm-4 col-12">
 				<%= f.label :qty, "* How Many Dozen?" %>

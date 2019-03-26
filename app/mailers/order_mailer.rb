@@ -10,6 +10,6 @@ class OrderMailer < ApplicationMailer
     @order = params[:order]
     @pickup_location = PickupLocation.find(@order.pickup_location_id)
     @user = params[:user]
-    mail(to: 'jasonlmilam@gmail.com', subject: 'Fresh Eggs are on their way')
+    mail(to: "#{@user.email}", subject: 'Fresh Eggs are on their way')
   end
 end
