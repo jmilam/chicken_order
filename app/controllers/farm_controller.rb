@@ -13,7 +13,7 @@ class FarmController < ApplicationController
     else
       flash[:alert] = "There was an error when updating farm: #{@farm.errors.messages}"
     end
-    redirect_to edit_farm_path(@farm.id)
+    redirect_to edit_farm_path(@farm.unique_key)
   end
 
   private
